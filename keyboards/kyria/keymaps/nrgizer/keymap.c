@@ -49,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_U,         KC_SCLN,      _______, \
+      LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______, \
       KC_TAB,              LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,             KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
               XXXXXXX, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX, XXXXXXX
@@ -354,7 +354,19 @@ static void render_status(void) {
             oled_write_P(PSTR("Numpad\n"), false);
             break;
         case _LNAVS:
-            oled_write_P(PSTR("Left navs\n"), false);
+            oled_write_P(PSTR("Left navigation\n"), false);
+            break;
+        case _FUNC:
+            oled_write_P(PSTR("Function\n"), false);
+            break;
+        case _I3MOVE:
+            oled_write_P(PSTR("i3 Move\n"), false);
+            break;
+        case _I3WORK:
+            oled_write_P(PSTR("i3 Workspace\n"), false);
+            break;
+        case _SHORT:
+            oled_write_P(PSTR("Shortcuts\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
