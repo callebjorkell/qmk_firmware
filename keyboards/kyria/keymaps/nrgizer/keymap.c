@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______, \
       KC_TAB,              LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,             KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              XXXXXXX, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX, XXXXXXX
+              XXXXXXX, KC_LEAD, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), XXXXXXX, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
 
     ),
 
@@ -296,7 +296,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+LEADER_EXTERNS();
+
 void matrix_scan_user(void) {
+    LEADER_DICTIONARY() {
+        leading = false;
+        leader_end();
+
+        SEQ_ONE_KEY(KC_C) { // Markdown code
+            SEND_STRING("`` " SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+        }
+        SEQ_TWO_KEYS(KC_C, KC_B) { // Markdown code block
+            SEND_STRING("```" SS_LSFT(SS_TAP(X_ENTER) SS_TAP(X_ENTER)) "``` " SS_TAP(X_UP));
+        }
+    }
 }
 
 #ifdef OLED_DRIVER_ENABLE
@@ -330,7 +343,7 @@ static void render_qmk_logo(void) {
 static void render_status(void) {
     // QMK Logo and version information
     render_qmk_logo();
-    oled_write_P(PSTR("Kyria\n\n"), false);
+    oled_write_P(PSTR("        Calle's Kyria\n\n"), false);
 
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
@@ -354,7 +367,7 @@ static void render_status(void) {
             oled_write_P(PSTR("Numpad\n"), false);
             break;
         case _LNAVS:
-            oled_write_P(PSTR("Left navigation\n"), false);
+            oled_write_P(PSTR("Left navs\n"), false);
             break;
         case _FUNC:
             oled_write_P(PSTR("Function\n"), false);
