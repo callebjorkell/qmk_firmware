@@ -343,7 +343,7 @@ static void render_qmk_logo(void) {
 static void render_status(void) {
     // QMK Logo and version information
     render_qmk_logo();
-    oled_write_P(PSTR("        Calle's Kyria\n\n"), false);
+    oled_write_P(PSTR("       Calle's Kyria\n\n"), false);
 
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
