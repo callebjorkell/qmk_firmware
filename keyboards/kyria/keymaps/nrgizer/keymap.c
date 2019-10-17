@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______, \
       KC_TAB,              LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,             KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              XXXXXXX, KC_LEAD, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), XXXXXXX, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
+              XXXXXXX, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
 
     ),
 
@@ -222,7 +222,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, _______, RGB_SAI, RGB_HUI, RGB_VAI, KC_VOLU,                                                           _______, _______, _______, _______, _______, DYN_REC_START1, \
        _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               _______, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
        _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), TO(_LNAVS), TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
-                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+                                  _______, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
      ),
 
  /*
