@@ -299,10 +299,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch(keycode) {
             case THUMBSUP:
-                SEND_STRING(SS_LCTRL(SS_LSFT("u")) "1f44d" SS_TAP(X_ENTER));
+                SEND_STRING(":thumbsup:");
                 return false;
             case LAUGHING:
-                SEND_STRING(SS_LCTRL(SS_LSFT("u")) "1f606" SS_TAP(X_ENTER));
+                SEND_STRING(":laughing:");
                 return false;
         }
     }
