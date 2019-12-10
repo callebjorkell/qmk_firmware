@@ -30,31 +30,33 @@
 enum keycodes {
   THUMBSUP = SAFE_RANGE,
   LAUGHING,
-  DYNAMIC_MACRO_RANGE
+  DYNAMIC_MACRO_RANGE,
+  SHIFT_HOLD
 };
 
 #include "dynamic_macro.h"
 
+bool is_shift_hold_active = false;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Base Layer: COLEMAK
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * | ESC    |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * | LSFT   |   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LCTL   |   Z  |   X  |   C  |   V  |   B  |LShift|      |  | Del  |      |   N  |   M  | ,  < | . >  | /  ? |  - _   |
- * `----------------------+------+------+------+------+      |  |------+------+------+------+------+----------------------'
- *                        | GUI  | Del  |      | Space| Enter|  | Bspc | Space|      | Bksp | AltGr|
- *                        |      |      | Lower| Shift| Alt  |  |      | Nav  | Raise|      |      |
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
       LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______, \
       KC_TAB,              LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,             KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   THUMBSUP, XXXXXXX, XXXXXXX, LAUGHING, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              XXXXXXX, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
+              KC_MUTE, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
 
     ),
 
@@ -164,17 +166,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 /*
- * Lower Layer: Numpad, Media
+ * Layer template
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      | VolUp|      |      |                              | / ?  | 7 &  | 8 *  | 9 (  | - _  |        |
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      | Prev | Play | Next | CCCV |                              | *    | 4 $  | 5 %  | 6 ^  | , <  | +      |
+ * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      | VolDn| Mute |      |      |      |  |      |      | 0 )  | 1 !  | 2 @  | 3 #  | = +  |        |
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        |      |      | Lower|      |      |  |      | Nav  | Raise|      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NUM] = LAYOUT(
@@ -224,7 +226,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, _______, RGB_SAI, RGB_HUI, RGB_VAI, KC_VOLU,                                                           _______, _______, _______, _______, _______, DYN_REC_START1, \
        _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               _______, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
        _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), TO(_LNAVS), TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
-                                  _______, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
+                                  SHIFT_HOLD, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
      ),
 
  /*
@@ -244,7 +246,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      [_I3WORK] = LAYOUT(
        _______, _______, _______, _______, LGUI(KC_TAB), _______,                                _______, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), _______, _______, \
        _______, _______, _______, _______, _______, _______,                                     LALT(LGUI(KC_LEFT)), LGUI(KC_4), LGUI(KC_5), LGUI(KC_6), LALT(LGUI(KC_RIGHT)), _______, \
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), _______, _______, \
+       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), KC_COLN, _______, \
                                   _______, _______, LCTL(LSFT(KC_PSCREEN)), _______, _______, _______, _______, LGUI(KC_0), _______,    _______
      ),
 
@@ -304,6 +306,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case LAUGHING:
                 SEND_STRING(":laughing:");
                 return false;
+            case SHIFT_HOLD:
+                if (is_shift_hold_active) {
+                    unregister_code(KC_LSFT);
+                } else {
+                    register_code(KC_LSFT);
+                }
+                is_shift_hold_active = !is_shift_hold_active;
+                return false;
         }
     }
     return true;
@@ -321,6 +331,9 @@ void matrix_scan_user(void) {
         }
         SEQ_TWO_KEYS(KC_C, KC_B) { // Markdown code block
             SEND_STRING("```" SS_LSFT(SS_TAP(X_ENTER) SS_TAP(X_ENTER)) "``` " SS_TAP(X_UP));
+        }
+        SEQ_TWO_KEYS(KC_E, KC_N) { // if not nil
+            SEND_STRING("if err != nil {" SS_TAP(X_ENTER));
         }
     }
 }
@@ -419,6 +432,13 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         switch (biton32(layer_state)) {
             case _COLEMAK:
+                if (clockwise) {
+                    tap_code(KC_VOLU);
+                } else {
+                    tap_code(KC_VOLD);
+                }
+                break;
+            default:
                 // Move whole words. Hold shift to select while moving.
                 if (clockwise) {
                     SEND_STRING(SS_DOWN(X_LCTRL)SS_TAP(X_RIGHT)SS_UP(X_LCTRL));
@@ -426,32 +446,21 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                     SEND_STRING(SS_DOWN(X_LCTRL)SS_TAP(X_LEFT)SS_UP(X_LCTRL));
                 }
                 break;
-            default:
-                // History scrubbing. For Adobe products, hold shift while moving
-                // backward to go forward instead.
-                if (clockwise) {
-                    SEND_STRING(SS_LCTRL("z"));
-                } else {
-                    SEND_STRING(SS_LCTRL("y"));
-                }
-                break;
         }
     } else if (index == 1) {
         switch (biton32(layer_state)) {
             case _COLEMAK:
-                // Scrolling with PageUp and PgDn.
                 if (clockwise) {
-                    tap_code(KC_PGDN);
+                    tap_code(KC_MS_WH_UP);
                 } else {
-                    tap_code(KC_PGUP);
+                    tap_code(KC_MS_WH_DOWN);
                 }
                 break;
             default:
-                // Volume control.
                 if (clockwise) {
-                    tap_code(KC_VOLU);
+                    tap_code(KC_MS_WH_LEFT);
                 } else {
-                    tap_code(KC_VOLD);
+                    tap_code(KC_MS_WH_RIGHT);
                 }
                 break;
         }
