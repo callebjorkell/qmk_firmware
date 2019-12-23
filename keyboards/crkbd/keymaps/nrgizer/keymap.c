@@ -1,14 +1,5 @@
 #include QMK_KEYBOARD_H
 
-#ifdef RGB_MATRIX_ENABLE
-  #include "rgb_matrix.h"
-#endif
-
-#ifdef RGBLIGHT_ENABLE
-//Following line allows macro to read current RGB settings
-extern rgblight_config_t rgblight_config;
-#endif
-
 extern uint8_t is_master;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -195,25 +186,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-int RGB_current_mode;
-
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
-
-void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
-    #endif
-    //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
-    #ifdef SSD1306OLED
-        iota_gfx_init(!has_usb());   // turns on the display
-    #endif
-}
-
 #ifdef OLED_DRIVER_ENABLE
-oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_0; }
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+    return OLED_ROTATION_0;
+}
 
 static void render_qmk_logo(void) {
   static const char PROGMEM qmk_logo[] = {
@@ -225,7 +201,7 @@ static void render_qmk_logo(void) {
 }
 
 static void render_status(void) {
-    oled_write_P(PSTR("       Calle's Corne\n\n"), false);
+    oled_write_P(PSTR("Calle's Corne\n\n"), false);
 
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
@@ -269,43 +245,10 @@ static void render_status(void) {
 }
 
 void oled_task_user(void) {
-    if (is_keyboard_master()) {
+    if (is_master) {
         render_status(); // Renders the current keyboard state
     } else {
-        // QMK Logo and version information
         render_qmk_logo();
     }
 }
 #endif
-
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-#ifdef SSD1306OLED
-    set_keylog(keycode, record);
-#endif
-    // set_timelog();
-  }
-
-  switch (keycode) {
-    case RGB_MOD:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          rgblight_mode(RGB_current_mode);
-          rgblight_step();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      return false;
-    case RGBRST:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          eeconfig_update_rgblight_default();
-          rgblight_enable();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      break;
-  }
-  return true;
-}
