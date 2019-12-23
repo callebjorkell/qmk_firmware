@@ -1,3 +1,5 @@
+LINK_TIME_OPTIMIZATION_ENABLE = yes
+
 BOOTLOADER                 = atmel-dfu # Make the reset button work properly
 RGB_MATRIX_ENABLE          = WS2812    # Enable RGB matrix instead of the regular underglow
 
