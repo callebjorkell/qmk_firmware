@@ -22,6 +22,7 @@
 
 #ifdef RGBLIGHT_ENABLE
   #undef RGBLIGHT_ANIMATIONS
+  #define RGBLIGHT_SLEEP
   #define RGBLIGHT_HUE_STEP 6
   #define RGBLIGHT_SAT_STEP 6
   #define RGBLIGHT_VAL_STEP 8
@@ -32,8 +33,12 @@
 // every other tick, lower the resolution to 2.
 #define ENCODER_RESOLUTION 2
 
+#define TAPPING_TERM_PER_KEY
 #define TAPPING_TERM 225
 #define IGNORE_MOD_TAP_INTERRUPT
 
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
+
+#define ONESHOT_TAP_TOGGLE 3
+#define ONESHOT_TIMEOUT 2000
