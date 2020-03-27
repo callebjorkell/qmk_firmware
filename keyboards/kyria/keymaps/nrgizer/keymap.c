@@ -20,19 +20,23 @@
 #define _DAN 2
 #define _SYMB 3
 #define _NAVS 4
-#define _LNAVS 5
-#define _NUM 6
-#define _FUNC 7
-#define _SHORT 8
-#define _I3WORK 9
-#define _I3MOVE 10
+#define _NUM 5
+#define _FUNC 6
+#define _SHORT 7
+#define _I3WORK 8
+#define _I3MOVE 9
 
+// DYNAMIC_MACRO_RANGE must always be the last element of the enum since it is used to create other keycodes after it.
 enum keycodes {
   THUMBSUP = SAFE_RANGE,
   LAUGHING,
-  DYNAMIC_MACRO_RANGE,
-  SHIFT_HOLD
+  YUM,
+  OK_HAND,
+  SHIFT_HOLD,
+  DYNAMIC_MACRO_RANGE
 };
+
+#define KX_CALT LCTL(KC_LALT)
 
 #include "dynamic_macro.h"
 
@@ -53,10 +57,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      LCTL(LGUI(KC_SPACE)),KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,      _______, \
-      KC_TAB,              LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
-      KC_LSFT,             KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   THUMBSUP, XXXXXXX, XXXXXXX, LAUGHING, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              KC_MUTE, XXXXXXX, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
+      OSL(_SWE),  KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,    KC_LEAD, \
+      KC_TAB,   LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
+      KC_LSFT,  KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   THUMBSUP, XXXXXXX, XXXXXXX, LAUGHING, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
+              KC_MUTE, KX_CALT, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LSFT, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
 
     ),
 
@@ -119,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SYMB] = LAYOUT(
       _______, KC_CIRC, KC_DLR,  KC_LCBR, KC_RCBR, KC_HASH,                                               KC_AMPR, KC_EXLM, KC_QUES, KC_UNDS, KC_SCOLON, _______, \
       _______, KC_COLN, KC_EQL,  KC_LPRN, KC_RPRN, KC_AT,                                                 KC_DQUO, KC_PLUS, KC_ASTR, KC_MINUS, KC_GRAVE, KC_QUOTE, \
-      _______, KC_EXLM, KC_PERC, KC_LBRC, LT(_NUM, KC_RBRC), KC_TILD, _______, _______, _______, _______, KC_BSLASH, KC_PIPE, KC_LABK, KC_RABK, _______, _______, \
+      _______, KC_EXLM, KC_PERC, KC_LBRC, LT(_NUM, KC_RBRC), KC_TILD, OK_HAND, _______, _______, _______, KC_BSLASH, KC_PIPE, KC_LABK, KC_RABK, _______, _______, \
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
@@ -138,31 +142,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NAVS] = LAYOUT(
-      TO(_LNAVS),   _______, _______, _______, _______, _______,                                     XXXXXXX, KC_PGUP, KC_UP,  KC_PGDOWN, XXXXXXX, TO(_COLEMAK), \
+      _______,   _______, _______, _______, _______, _______,                                     XXXXXXX, KC_PGUP, KC_UP,  KC_PGDOWN, XXXXXXX, TO(_COLEMAK), \
       _______, _______, _______, _______, _______, _______,                                     KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT, KC_END,  _______, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_INSERT, LALT(LSFT(KC_LEFT)),LALT(KC_1), LALT(LSFT(KC_RIGHT)), XXXXXXX,  _______, \
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, YUM    , KC_INSERT, LALT(LSFT(KC_LEFT)),LALT(KC_1), LALT(LSFT(KC_RIGHT)), XXXXXXX,  _______, \
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-),
-
-/*
- * Layer template
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
-    [_LNAVS] = LAYOUT(
-      TO(_COLEMAK), XXXXXXX,   KC_PGUP,            KC_UP,      KC_PGDOWN, XXXXXXX,                                                        _______, _______, _______, _______, _______, _______, \
-      _______,      KC_HOME,   KC_LEFT,            KC_DOWN,    KC_RIGHT, KC_END,                                                         _______, _______, _______, _______, _______, _______, \
-      _______,      KC_INSERT, LALT(LSFT(KC_LEFT)),LALT(KC_1), LALT(LSFT(KC_RIGHT)), XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-                                     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 /*
@@ -182,8 +165,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NUM] = LAYOUT(
       _______, _______, _______, _______, _______, _______,                                     KC_ASTR, KC_7,    KC_8,    KC_9, KC_SLSH, TO(_COLEMAK), \
       _______, _______, _______, _______, _______, _______,                                     KC_PLUS, KC_4,    KC_5,    KC_6, KC_MINS, _______, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, KC_1,    KC_2,    KC_3, KC_COMM, _______, \
-                                 _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_COMM, KC_1,    KC_2,    KC_3, KC_DOT,  _______, \
+                                 _______, _______, _______, _______, _______, _______, _______, KC_0,    _______, _______
     ),
 
 /*
@@ -225,7 +208,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      [_SHORT] = LAYOUT(
        _______, _______, RGB_SAI, RGB_HUI, RGB_VAI, KC_VOLU,                                                           _______, _______, _______, _______, _______, DYN_REC_START1, \
        _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               _______, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
-       _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), TO(_LNAVS), TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
+       _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), XXXXXXX, TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
                                   SHIFT_HOLD, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
      ),
 
@@ -306,6 +289,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case LAUGHING:
                 SEND_STRING(":laughing:");
                 return false;
+            case YUM:
+                SEND_STRING(":yum:");
+                return false;
+            case OK_HAND:
+                SEND_STRING(":ok_hand:");
+                return false;
             case SHIFT_HOLD:
                 if (is_shift_hold_active) {
                     unregister_code(KC_LSFT);
@@ -335,7 +324,23 @@ void matrix_scan_user(void) {
         SEQ_TWO_KEYS(KC_E, KC_N) { // if not nil
             SEND_STRING("if err != nil {" SS_TAP(X_ENTER));
         }
+        SEQ_TWO_KEYS(KC_S, KC_K) { // kill ssh sessions
+            SEND_STRING(SS_TAP(X_ENTER) "~.");
+        }
     }
+}
+
+uint16_t get_tapping_term(uint16_t keycode) {
+  switch (keycode) {
+    case LT(_NUM,KC_V):
+      return 150;
+    default:
+      return TAPPING_TERM;
+  }
+}
+
+void keyboard_post_init_user(void){
+    rgblight_enable_noeeprom();
 }
 
 #ifdef OLED_DRIVER_ENABLE
@@ -392,9 +397,6 @@ static void render_status(void) {
         case _NUM:
             oled_write_P(PSTR("Numpad\n"), false);
             break;
-        case _LNAVS:
-            oled_write_P(PSTR("Left navs\n"), false);
-            break;
         case _FUNC:
             oled_write_P(PSTR("Function\n"), false);
             break;
@@ -435,17 +437,17 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             case _SWE:
             case _DAN:
                 if (clockwise) {
-                    tap_code(KC_VOLU);
-                } else {
                     tap_code(KC_VOLD);
+                } else {
+                    tap_code(KC_VOLU);
                 }
                 break;
             default:
                 // Move whole words. Hold shift to select while moving.
                 if (clockwise) {
-                    SEND_STRING(SS_DOWN(X_LCTRL)SS_TAP(X_RIGHT)SS_UP(X_LCTRL));
-                } else {
                     SEND_STRING(SS_DOWN(X_LCTRL)SS_TAP(X_LEFT)SS_UP(X_LCTRL));
+                } else {
+                    SEND_STRING(SS_DOWN(X_LCTRL)SS_TAP(X_RIGHT)SS_UP(X_LCTRL));
                 }
                 break;
         }
@@ -455,16 +457,16 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             case _SWE:
             case _DAN:
                 if (clockwise) {
-                    tap_code(KC_MS_WH_UP);
-                } else {
                     tap_code(KC_MS_WH_DOWN);
+                } else {
+                    tap_code(KC_MS_WH_UP);
                 }
                 break;
             default:
                 if (clockwise) {
-                    tap_code(KC_MS_WH_LEFT);
-                } else {
                     tap_code(KC_MS_WH_RIGHT);
+                } else {
+                    tap_code(KC_MS_WH_LEFT);
                 }
                 break;
         }
