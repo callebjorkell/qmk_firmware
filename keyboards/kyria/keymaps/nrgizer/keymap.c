@@ -25,6 +25,7 @@
 #define _SHORT 7
 #define _I3WORK 8
 #define _I3MOVE 9
+#define _RUNNER 10
 
 // DYNAMIC_MACRO_RANGE must always be the last element of the enum since it is used to create other keycodes after it.
 enum keycodes {
@@ -35,8 +36,6 @@ enum keycodes {
   SHIFT_HOLD,
   DYNAMIC_MACRO_RANGE
 };
-
-#define KX_CALT LCTL(KC_LALT)
 
 #include "dynamic_macro.h"
 
@@ -57,10 +56,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      OSL(_SWE),  KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,    KC_LEAD, \
+      OSL(_SWE),  KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,    _______, \
       KC_TAB,   LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,  KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   THUMBSUP, XXXXXXX, XXXXXXX, LAUGHING, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              KC_MUTE, KX_CALT, KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LSFT, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
+              KC_MUTE, TG(_RUNNER), KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
 
     ),
 
@@ -227,9 +226,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *                        `----------------------------------'  `----------------------------------'
   */
      [_I3WORK] = LAYOUT(
-       _______, _______, _______, _______, LGUI(KC_TAB), _______,                                _______, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), _______, _______, \
+       _______, _______, _______, _______, LGUI(KC_TAB), _______,                                XXXXXXX, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), XXXXXXX, _______, \
        _______, _______, _______, _______, _______, _______,                                     LALT(LGUI(KC_LEFT)), LGUI(KC_4), LGUI(KC_5), LGUI(KC_6), LALT(LGUI(KC_RIGHT)), _______, \
-       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), KC_COLN, _______, \
+       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), XXXXXXX, _______, \
                                   _______, _______, LCTL(LSFT(KC_PSCREEN)), _______, _______, _______, _______, LGUI(KC_0), _______,    _______
      ),
 
@@ -251,6 +250,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, _______, _______, _______, _______, _______,                                     _______, LGUI(KC_PGUP), LGUI(KC_UP), _______, _______, _______, \
        _______, _______, _______, _______, _______, _______,                                     _______, LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_RIGHT), _______, _______, \
        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+     ),
+
+ /*
+  * Runner/debug Layer
+  *
+  * ,-------------------------------------------.                              ,-------------------------------------------.
+  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+  *                        |      |      |      |      |      |  |      |      |      |      |      |
+  *                        |      |      |      |      |      |  |      |      |      |      |      |
+  *                        `----------------------------------'  `----------------------------------'
+  */
+     [_RUNNER] = LAYOUT(
+       XXXXXXX, XXXXXXX, LCTL(KC_F2), LCTL(LSFT(KC_F11)), LCTL(KC_F5), LCTL(LSFT(KC_F10)),       _______, _______, _______, _______, _______, _______, \
+       _______, XXXXXXX, LSFT(KC_F8), KC_F7, KC_F8, KC_F9  ,                                     _______, _______, _______, _______, _______, _______, \
+       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
                                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
      ),
 
@@ -334,6 +354,8 @@ uint16_t get_tapping_term(uint16_t keycode) {
   switch (keycode) {
     case LT(_NUM,KC_V):
       return 150;
+    case LSFT_T(KC_A):
+      return TAPPING_TERM + 50;
     default:
       return TAPPING_TERM;
   }
@@ -408,6 +430,9 @@ static void render_status(void) {
             break;
         case _SHORT:
             oled_write_P(PSTR("Shortcuts\n"), false);
+            break;
+        case _RUNNER:
+            oled_write_P(PSTR("Debug\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
