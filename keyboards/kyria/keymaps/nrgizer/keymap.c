@@ -1,4 +1,4 @@
-/* Copyright 2019 Thomas Baart <thomas@splitkb.com>
+/* Copyright 2020 Carl-Magnus Björkell <calle@gibberish.dk>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,17 +27,15 @@
 #define _I3MOVE 9
 #define _RUNNER 10
 
-// DYNAMIC_MACRO_RANGE must always be the last element of the enum since it is used to create other keycodes after it.
+#define HSV_BASE 30, 255, 200
+
 enum keycodes {
   THUMBSUP = SAFE_RANGE,
   LAUGHING,
   YUM,
   OK_HAND,
-  SHIFT_HOLD,
-  DYNAMIC_MACRO_RANGE
+  SHIFT_HOLD
 };
-
-#include "dynamic_macro.h"
 
 bool is_shift_hold_active = false;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -297,10 +295,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!process_record_dynamic_macro(keycode, record)) {
-        return false;
-    }
-
     if (record->event.pressed) {
         switch(keycode) {
             case THUMBSUP:
@@ -391,6 +385,26 @@ static void render_qmk_logo(void) {
     0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,0};
 
   oled_write_P(qmk_logo, false);
+}
+
+void rgblight_set_hsv_and_mode(uint8_t hue, uint8_t sat, uint8_t val, uint8_t mode) {
+    rgblight_sethsv_noeeprom(hue, sat, val);
+    wait_us(175);  // Add a slight delay between color and mode to ensure it's processed correctly
+    rgblight_mode_noeeprom(mode);
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+#if defined(RGBLIGHT_ENABLE)
+    switch (get_highest_layer(state)) {
+        case _RUNNER:
+            rgblight_set_hsv_and_mode(HSV_BLUE, RGBLIGHT_MODE_BREATHING + 2);
+            break;
+        default:  //  for any other layers, or the default layer
+            rgblight_set_hsv_and_mode(HSV_BASE, RGBLIGHT_MODE_STATIC_LIGHT);
+            break;
+    }
+#endif
+    return state;
 }
 
 static void render_status(void) {
