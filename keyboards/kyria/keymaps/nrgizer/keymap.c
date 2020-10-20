@@ -57,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       OSL(_SWE),  KC_Q,         KC_W,         LT(_I3WORK,KC_F), LT(_I3MOVE,KC_P), KC_G,                                         KC_J, KC_L,         KC_U,         KC_Y,         KC_SCLN,    _______, \
       KC_TAB,   LSFT_T(KC_A), LCTL_T(KC_R), LALT_T(KC_S),     LT(_NAVS,KC_T),   LT(_FUNC,KC_D),                               KC_H, LGUI_T(KC_N), LALT_T(KC_E), LCTL_T(KC_I), LSFT_T(KC_O), KC_QUOT, \
       KC_LSFT,  KC_Z,         KC_X,         KC_C,             LT(_NUM,KC_V),    KC_B,   THUMBSUP, XXXXXXX, XXXXXXX, LAUGHING, KC_K, KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_RSFT, \
-              KC_MUTE, TG(_RUNNER), KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), XXXXXXX
+              KC_MUTE, TG(_RUNNER), KC_DEL, LCTL_T(KC_SPC),LGUI_T(KC_ENT), KC_LEAD, KC_BSPACE, MO(_SYMB), LT(_SHORT,KC_ESCAPE), KC_MEDIA_PLAY_PAUSE
 
     ),
 
@@ -356,9 +356,9 @@ uint16_t get_tapping_term(uint16_t keycode) {
 }
 
 void rgblight_set_hsv_and_mode(uint8_t hue, uint8_t sat, uint8_t val, uint8_t mode) {
-    rgblight_sethsv_noeeprom(hue, sat, val);
-    wait_us(175);  // Add a slight delay between color and mode to ensure it's processed correctly
     rgblight_mode_noeeprom(mode);
+    wait_us(175);  // Add a slight delay between color and mode to ensure it's processed correctly
+    rgblight_sethsv_noeeprom(hue, sat, val);
 }
 
 void keyboard_post_init_user(void){
@@ -492,23 +492,10 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 break;
         }
     } else if (index == 1) {
-        switch (get_highest_layer(layer_state)) {
-            case _COLEMAK:
-            case _SWE:
-            case _DAN:
-                if (clockwise) {
-                    tap_code(KC_MS_WH_DOWN);
-                } else {
-                    tap_code(KC_MS_WH_UP);
-                }
-                break;
-            default:
-                if (clockwise) {
-                    tap_code(KC_MS_WH_RIGHT);
-                } else {
-                    tap_code(KC_MS_WH_LEFT);
-                }
-                break;
+        if (clockwise) {
+            tap_code(KC_MNXT);
+        } else {
+            tap_code(KC_MPRV);
         }
     }
 }
