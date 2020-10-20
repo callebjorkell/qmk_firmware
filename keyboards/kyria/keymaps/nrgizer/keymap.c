@@ -27,7 +27,7 @@
 #define _I3MOVE 9
 #define _RUNNER 10
 
-#define HSV_BASE 30, 255, 200
+#define HSV_BASE 27, 255, 180
 
 enum keycodes {
   THUMBSUP = SAFE_RANGE,
@@ -203,9 +203,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *                        `----------------------------------'  `----------------------------------'
   */
      [_SHORT] = LAYOUT(
-       _______, _______, RGB_SAI, RGB_HUI, RGB_VAI, KC_VOLU,                                                           _______, _______, _______, _______, _______, DYN_REC_START1, \
-       _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               _______, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
-       _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), XXXXXXX, TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
+       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,                                                           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, DYN_REC_START1, \
+       _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               XXXXXXX, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
+       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), XXXXXXX, TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
                                   SHIFT_HOLD, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
      ),
 
@@ -355,8 +355,15 @@ uint16_t get_tapping_term(uint16_t keycode) {
   }
 }
 
+void rgblight_set_hsv_and_mode(uint8_t hue, uint8_t sat, uint8_t val, uint8_t mode) {
+    rgblight_sethsv_noeeprom(hue, sat, val);
+    wait_us(175);  // Add a slight delay between color and mode to ensure it's processed correctly
+    rgblight_mode_noeeprom(mode);
+}
+
 void keyboard_post_init_user(void){
     rgblight_enable_noeeprom();
+    rgblight_set_hsv_and_mode(HSV_BASE, RGBLIGHT_MODE_STATIC_LIGHT);
 }
 
 #ifdef OLED_DRIVER_ENABLE
@@ -385,12 +392,6 @@ static void render_qmk_logo(void) {
     0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,0};
 
   oled_write_P(qmk_logo, false);
-}
-
-void rgblight_set_hsv_and_mode(uint8_t hue, uint8_t sat, uint8_t val, uint8_t mode) {
-    rgblight_sethsv_noeeprom(hue, sat, val);
-    wait_us(175);  // Add a slight delay between color and mode to ensure it's processed correctly
-    rgblight_mode_noeeprom(mode);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -471,7 +472,7 @@ void oled_task_user(void) {
 #ifdef ENCODER_ENABLE
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
-        switch (biton32(layer_state)) {
+        switch (get_highest_layer(layer_state)) {
             case _COLEMAK:
             case _SWE:
             case _DAN:
@@ -491,7 +492,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 break;
         }
     } else if (index == 1) {
-        switch (biton32(layer_state)) {
+        switch (get_highest_layer(layer_state)) {
             case _COLEMAK:
             case _SWE:
             case _DAN:
