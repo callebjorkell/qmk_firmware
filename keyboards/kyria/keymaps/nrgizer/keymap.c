@@ -26,6 +26,7 @@
 #define _I3WORK 8
 #define _I3MOVE 9
 #define _RUNNER 10
+#define _GTHUMB 11
 
 #define HSV_BASE 27, 255, 180
 
@@ -204,7 +205,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   */
      [_SHORT] = LAYOUT(
        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,                                                           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, DYN_REC_START1, \
-       _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               XXXXXXX, TO(_COLEMAK), TO(_SWE), TO(_DAN), XXXXXXX, DYN_REC_STOP, \
+       _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               XXXXXXX, TO(_COLEMAK), TO(_SWE), TO(_DAN), TO(_GTHUMB), DYN_REC_STOP, \
        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), XXXXXXX, TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
                                   SHIFT_HOLD, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
      ),
@@ -270,6 +271,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, XXXXXXX, LSFT(KC_F8), KC_F7, KC_F8, KC_F9  ,                                     _______, _______, _______, _______, _______, _______, \
        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
                                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+     ),
+
+ /*
+  * gThumb Layer
+  *
+  * ,-------------------------------------------.                              ,-------------------------------------------.
+  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+  *                        |      |      |      |      |      |  |      |      |      |      |      |
+  *                        |      |      |      |      |      |  |      |      |      |      |      |
+  *                        `----------------------------------'  `----------------------------------'
+  */
+     [_GTHUMB] = LAYOUT(
+       TO(_COLEMAK), XXXXXXX, XXXXXXX, LCTL(KC_1), XXXXXXX, XXXXXXX,       _______, _______, _______, _______, _______, _______, \
+       _______, XXXXXXX, XXXXXXX, KC_BSPACE, KC_SPC, XXXXXXX,                                     _______, _______, _______, _______, _______, _______, \
+       _______, XXXXXXX, XXXXXXX, KC_X, KC_Z, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+                                  _______, _______, LSFT(LALT(KC_1)), LALT(KC_1), _______, _______, _______, _______, _______, _______
      ),
 
 // /*
@@ -400,6 +422,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         case _RUNNER:
             rgblight_set_hsv_and_mode(HSV_BLUE, RGBLIGHT_MODE_BREATHING + 2);
             break;
+        case _GTHUMB:
+            rgblight_set_hsv_and_mode(HSV_RED, RGBLIGHT_MODE_BREATHING + 2);
+            break;
         default:  //  for any other layers, or the default layer
             rgblight_set_hsv_and_mode(HSV_BASE, RGBLIGHT_MODE_STATIC_LIGHT);
             break;
@@ -448,6 +473,9 @@ static void render_status(void) {
             break;
         case _RUNNER:
             oled_write_P(PSTR("Debug\n"), false);
+            break;
+        case _GTHUMB:
+            oled_write_P(PSTR("gThumb\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
