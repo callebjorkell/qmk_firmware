@@ -207,7 +207,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,                                                           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, DYN_REC_START1, \
        _______, KC_MPRV, KC_MSTP, KC_MEDIA_PLAY_PAUSE, KC_MNXT, KC_VOLD,                                               XXXXXXX, TO(_COLEMAK), TO(_SWE), TO(_DAN), TO(_GTHUMB), DYN_REC_STOP, \
        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, _______, _______, _______, _______, _______, TO(_NAVS), XXXXXXX, TO(_NUM),  XXXXXXX, DYN_MACRO_PLAY1, \
-                                  SHIFT_HOLD, _______, LALT(LSFT(KC_X)), _______, _______, _______, _______, _______, _______, _______
+                                  SHIFT_HOLD, _______, LALT(LSFT(KC_Z)), _______, _______, _______, _______, _______, _______, _______
      ),
 
  /*
